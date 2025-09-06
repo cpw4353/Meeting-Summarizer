@@ -11,14 +11,49 @@ The repository contains:
 
 ## 📖 Project Description
 
-This summarizer was built to support **meeting notes and action item extraction**, where accuracy and brevity are critical.  
+The Summarizer project is a Python-based application designed to generate accurate, concise, and context-aware summaries from multiple input modalities: plain text, images (via OCR), and audio recordings. It combines **rule-based extractive methods** with **transformer-based abstractive summarization** to provide outputs that are both faithful to the source and easy to consume.  
 
-Key features:
-- **Faithful summaries**: fixes run-ons, polishes grammar, uses Hugging Face [`sshleifer/distilbart-cnn-12-6`](https://huggingface.co/sshleifer/distilbart-cnn-12-6) for abstractive summarization.  
-- **Concise summaries**: salience-driven sentence selection to keep outputs short and actionable.  
-- **Slide-aware OCR summarization**: extracts and condenses slides into compact sentences.  
-- **Audio summarization**: transcribes recordings, removes fillers, and summarizes automatically.  
-- **Streamlit UI**: no CLI required — run a local app in your browser.
+### Motivation
+Modern meetings, presentations, and recordings often produce large amounts of unstructured information that can be difficult to review and share. Traditional summarization tools tend to either hallucinate content (abstractive methods) or miss key details (extractive methods). This project was developed to balance both approaches, producing summaries that are grounded, factual, and tailored to practical use cases such as **meeting minutes, slide decks, or voice memos**.  
+
+### Design
+The system is built around a modular core (`summarizer.py`) with three distinct pipelines:
+- **Text summarization**  
+  - Supports two styles:  
+    - *Faithful*: prioritizes accuracy, light rewriting, and readability. Uses Hugging Face’s [`sshleifer/distilbart-cnn-12-6`](https://huggingface.co/sshleifer/distilbart-cnn-12-6) for abstractive summarization of longer texts, with extractive fallback when transformers are unavailable.  
+    - *Concise*: selects the most salient sentences using heuristics that prioritize deadlines, names, and action items. Produces short, actionable summaries.  
+- **Slide-aware OCR summarization**  
+  - Uses Tesseract OCR to extract text from images.  
+  - Detects slide-like structures (titles, bullet points) and condenses them into compact sentences.  
+- **Audio summarization**  
+  - Transcribes speech with the `SpeechRecognition` library.  
+  - Cleans filler words, adds sentence boundaries, and adapts style automatically for short transcripts.  
+
+The `app.py` module provides a **Streamlit-based web application** that exposes these capabilities in an interactive browser UI. Users can paste text, upload images of slides, or upload audio recordings, and receive faithful, concise summaries without using the command line.
+
+### Features
+- **Multi-modal support**: text, image (OCR), and audio inputs.  
+- **Configurable styles**: choose between faithful (abstractive + extractive) or concise (salience-driven) summaries.  
+- **No hallucinations**: summaries never invent facts; outputs are grounded in the source text.  
+- **Streamlit UI**: provides a simple interface for non-technical users.  
+- **Extensible**: designed with modular pipelines for easy integration of new models or input types.  
+
+### Technology Stack
+- **Python 3.10+**  
+- **Hugging Face Transformers** (for abstractive summarization with DistilBART CNN)  
+- **Regex + scoring heuristics** (for extractive and concise summarization)  
+- **Pillow + pytesseract + Tesseract OCR** (for image/slide text extraction)  
+- **SpeechRecognition + PyAudio/PortAudio** (for speech-to-text transcription)  
+- **Streamlit** (for interactive web UI)  
+
+### Intended Use Cases
+- **Meeting notes**: convert long transcripts into crisp summaries with deadlines and action items highlighted.  
+- **Slide decks**: automatically condense presentations into 1–2 sentences per slide.  
+- **Voice memos**: transcribe and summarize audio recordings for quick review.  
+- **General summarization**: process any long-form text into digestible summaries.  
+
+This project emphasizes **practicality, accuracy, and accessibility**, ensuring that both technical and non-technical users can benefit from automated summarization in everyday workflows.
+
 
 ---
 
