@@ -1,15 +1,9 @@
-# --- Models & artifacts ---
+# Ignore model files and cache
 models/
 checkpoints/
 *.bin
 *.pt
-*.pth
 *.safetensors
 *.onnx
 *.ckpt
-*.tar
-*.zip
-
-# --- Caches ---
-.cache/
-huggingface/
+__pycache__/
