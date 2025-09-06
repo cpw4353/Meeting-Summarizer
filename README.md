@@ -62,3 +62,86 @@ This will:
 - Open the app in your browser at [http://localhost:8501](http://localhost:8501),
 - Let you paste text, upload an image, or upload an audio file for summarization.
 
+### 2. Library usage (for developers/scripts)
+Text Summarization
+``` python
+from summarizer import summarize_text
+
+text = "Emma will deliver the draft by Sept 20 and finalize by Oct 1."
+summary = summarize_text(text, style="faithful", max_len=120)
+print(summary)
+```
+OCR(slides/images)
+``` python
+from summarizer import summarize_ocr
+
+raw_text, summary = summarize_ocr("slide.png", style="concise")
+print(raw_text)
+print(summary)
+```
+Audio
+``` python
+from summarizer import summarize_audio
+
+transcript, summary = summarize_audio("meeting.wav", style="faithful")
+print(transcript)
+print(summary)
+```
+
+---
+
+## 🔍 How it Works
+- Faithful: grammar fixes, abstractive via DistilBART CNN, fallback extractive.
+- Concise: salience-driven sentence scoring with boosts for deadlines, action verbs, and names.
+- OCR: collapses slides into short compact summaries.
+- Audio: transcribes speech, removes filler words, adds soft sentence breaks.
+- UI: wraps all modes in a Streamlit app for easy interactive use.
+
+---
+
+## ⚙️ Configuration
+Environment variables (optional)
+- `SUMMARIZER_MODEL`→ override Hugging Face model (default:`sshleifer/distilbart-cnn-12-6`)
+- `SUMMARIZER_BEAMS`, `SUMMARIZER_REP_PENALTY`, etc.→ tune abstractive generation
+
+---
+
+## 📂 Repository Structure
+``` bash
+summarizer.py   # Core summarization logic
+app.py          # Streamlit UI
+README.md       # User guide
+```
+
+---
+
+## ⚠️ Troubleshooting
+- Model download slow/fails? → Hugging Face caches models in `~/.cache/huggingface`.
+- Tesseract not found? → Install system-wide and set `TESSERACT_CMD` env var if needed.
+- PyAudio install errors? → Install PortAudio (`brew install portaudio` or `sudo apt-get install portaudio19-dev`).
+- Streamlit not recognized? → Install with `pip install streamlit`.
+
+---
+
+## 📝 Notes
+- The default Hugging Face model (`sshleifer/distilbart-cnn-12-6`) is public and will auto-download.
+- Streamlit makes the app easy to use for non-developers — no CLI knowledge required.
+- Text, OCR, and audio summarization are modular — you can install only what you need.
+
+---
+
+## ⚡ Quick Start (for non-developers)
+1. clone the repo
+```
+git clone https://github.com/<your-username>/<your-repo>.git
+cd <your-repo>
+```
+2. Install requirements:
+```
+pip install transformers torch huggingface_hub streamlit pillow pytesseract SpeechRecognition pyaudio
+```
+3. Start the app:
+```
+streamlit run app.py
+```
+Now open http://localhost:8501 in your browser and start summarizing!
