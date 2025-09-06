@@ -85,19 +85,24 @@ pip install SpeechRecognition pyaudio
 ---
 
 ## 🚀 Usage Guide
-### 1. Run the Streamlit UI
-The `app.py` provides full browser-based interface.
+### 1. Set up a virtual environment (recommended)
+it is strongly recommended to run the summarizer in an isolated Python environment.
 
-Start it with:
+Windows (PowerShell or Git Bash)
 ```
-streamlit run app.py
+python -m venv .venv
+.venv\Scripts\activate
 ```
-This will:
-- Launch a local web server,
-- Open the app in your browser at [http://localhost:8501](http://localhost:8501),
-- Let you paste text, upload an image, or upload an audio file for summarization.
+macOS/Linux
+```
+python3 -m venv .venv
+source .venv/bin/activate
+```
+Once activated, your shell should show `(venv.)` at the beginning of the prompt
 
-### 2. Library usage (for developers/scripts)
+### 2. Install dependencies (See Dependencies heading)
+
+### 3. Library usage (for developers/scripts)
 Text Summarization
 ``` python
 from summarizer import summarize_text
@@ -123,6 +128,17 @@ print(transcript)
 print(summary)
 ```
 
+### 4. Run the Streamlit UI
+The `app.py` provides full browser-based interface.
+
+Start it with:
+```
+streamlit run app.py
+```
+This will:
+- Launch a local web server,
+- Open the app in your browser at [http://localhost:8501](http://localhost:8501),
+- Let you paste text, upload an image, or upload an audio file for summarization.
 ---
 
 ## 🔍 How it Works
